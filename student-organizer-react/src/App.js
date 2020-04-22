@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { getAllStudents } from './client';
-import { Table, Avatar, Spin } from 'antd';
+import { Table, Avatar, Spin, Modal } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 import Container from './components/Container';
 import Footer from './components/Footer';
+import AddStudentForm from './components/forms/AddStudentForm';
 
 
 const getIndicator = () => <LoadingOutlined style={{ fontSize: 24 }} spin />;
@@ -12,12 +13,38 @@ class App extends Component {
 
   state = {
     students: [],
-    isFetching: false
+    isFetching: false,
+    isAddStudentModalVisible: false
   }
 
   componentDidMount() {
     this.fetchStudents()
   }
+
+  handleOk = () => {
+    this.setState({
+      isAddStudentModalVisible: false
+    })
+  }
+
+  handleCancel = () => {
+    this.setState({
+      isAddStudentModalVisible: false
+    })
+  }
+
+  showModal = () => {
+    this.setState({
+      isAddStudentModalVisible: true
+    })
+  }
+
+  closeModal = () => {
+    this.setState({
+      isAddStudentModalVisible: false
+    })
+  }
+
 
   fetchStudents = () => {
     this.setState({
@@ -37,7 +64,7 @@ class App extends Component {
 
   render() {
 
-    const { students, isFetching } = this.state
+    const { students, isFetching, isAddStudentModalVisible } = this.state
 
     
 
@@ -88,7 +115,7 @@ class App extends Component {
         }
       ];
 
-      studentsList = <Table dataSource={students} columns={columns} rowKey='studentId' pagination={false} />
+      studentsList = <Table  style={{marginBottom: '100px'}} dataSource={students} columns={columns} rowKey='studentId' pagination={false} />
 
     }
 
@@ -97,7 +124,21 @@ class App extends Component {
 
         {studentsList}
 
-        <Footer numberOfStudents = {students.length}/>
+        <Modal
+        title='Add new student'
+        visible={isAddStudentModalVisible}
+        onOk={this.handleOk}
+        onCancel={this.handleCancel}
+        width={1000}
+        >
+        <AddStudentForm 
+          onSuccess={() => {
+            this.closeModal();
+            this.fetchStudents();
+            }}
+        />
+        </Modal>
+        <Footer numberOfStudents = {students.length} handleStudentClick={this.showModal}/>
 
       </Container>
 
