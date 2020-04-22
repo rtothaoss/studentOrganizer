@@ -1,5 +1,8 @@
 package com.rossCarmack.studentOrganizer.student;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
@@ -9,14 +12,44 @@ import java.util.UUID;
 @Repository
 public class StudentDataAccessService {
 
+    private final JdbcTemplate jdbcTemplate;
 
+    @Autowired
+    public StudentDataAccessService(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
-    public List<Student> selectAllStudents() {
-        return List.of(
-                new Student(UUID.randomUUID(), "James", "Bond", "JamesBond@gmail.com", Student.Gender.MALE),
-                new Student(UUID.randomUUID(), "Elisa", "Tamara", "ElisaTamara@gmail.com", Student.Gender.FEMALE)
-        );
+     List<Student> selectAllStudents() {
+        String sql = "" +
+                "SELECT " +
+                " student_id, " +
+                " first_name, " +
+                " last_name, " +
+                " email, " +
+                " gender " +
+                "FROM student";
 
+        List<Student> students = jdbcTemplate.query(sql, mapStudentFromDb());
+            return students;
+    }
+
+    private RowMapper<Student> mapStudentFromDb() {
+        return (resultSet, i) -> {
+            String studentIdStr = resultSet.getString("student_id");
+            UUID studentId = UUID.fromString(studentIdStr);
+            String firstName = resultSet.getString("first_name");
+            String lastName = resultSet.getString("last_name");
+            String email = resultSet.getString("email");
+            String genderStr = resultSet.getString("gender").toUpperCase();
+            Student.Gender gender = Student.Gender.valueOf(genderStr);
+            return new Student(
+                    studentId,
+                    firstName,
+                    lastName,
+                    email,
+                    gender
+            );
+        };
     }
 
 }
