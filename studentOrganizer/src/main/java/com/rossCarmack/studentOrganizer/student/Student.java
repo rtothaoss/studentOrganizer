@@ -4,14 +4,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 public class Student {
 
     @Getter private final UUID studentId;
+    @NotBlank(message = "First name cannot be blank")
     @Getter private final String firstName;
+    @NotBlank(message = "Last name cannot be blank")
     @Getter private final String lastName;
+    @NotBlank(message = "Email cannot be blank")
     @Getter private final String email;
+    @NotNull
     @Getter private final Gender gender;
 
     public Student(@JsonProperty("studentId") UUID studentId,
