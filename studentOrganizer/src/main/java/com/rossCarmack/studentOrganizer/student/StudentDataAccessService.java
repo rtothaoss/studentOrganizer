@@ -1,5 +1,6 @@
 package com.rossCarmack.studentOrganizer.student;
 
+import com.rossCarmack.studentOrganizer.exception.EmailAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -20,11 +21,26 @@ public class StudentDataAccessService {
     }
 
     int insertStudent(UUID newStudentId, Student student) {
+//        if(isEmailTaken(student.getEmail())) {
+//            throw new EmailAlreadyExistsException("Email '" + student.getEmail() + "' already exists.");
+//        }
+
         String sql = "" +
                 "INSERT INTO student (student_id, first_name, last_name, email, gender) " +
                 "VALUES (?, ?, ?, ?, ?)";
         return jdbcTemplate.update(sql, newStudentId, student.getFirstName(), student.getLastName(), student.getEmail(), student.getGender().name().toUpperCase());
 
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    boolean isEmailTaken(String email) {
+        String sql = "" +
+                    " SELECT EXISTS ( " +
+                    " SELECT 1 " +
+                    " FROM student " +
+                    " WHERE email = ?" +
+                    ")";
+        return jdbcTemplate.queryForObject(sql, new Object[] {email}, (resultSet, i) -> resultSet.getBoolean(1));
     }
 
      List<Student> selectAllStudents() {
