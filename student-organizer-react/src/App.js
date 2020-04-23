@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { getAllStudents } from './client';
-import { Table, Avatar, Spin, Modal } from 'antd';
+import { Table, Avatar, Spin, Modal, Empty } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 import Container from './components/Container';
 import Footer from './components/Footer';
 import AddStudentForm from './components/forms/AddStudentForm';
+import * as notification from './components/Notification';
 
 
 const getIndicator = () => <LoadingOutlined style={{ fontSize: 24 }} spin />;
@@ -60,6 +61,14 @@ class App extends Component {
           })
 
         }))
+        .catch(error => {
+          const message = error.error.message
+          const description = error.error.error
+          notification.errorNotification(message, description)
+          this.setState({
+            isFetching: false
+          })
+        })
   }
 
   render() {
@@ -68,7 +77,7 @@ class App extends Component {
 
     
 
-    let studentsList = <h2>No Students Present</h2>
+    let studentsList = <Empty description={<h1>No students found</h1>}/>
 
     if(isFetching) {
       return (
