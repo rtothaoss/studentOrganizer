@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { getAllStudents } from './client';
-import { Table, Avatar, Spin, Modal, Empty } from 'antd';
+import { Table, Avatar, Spin, Modal, Empty, err } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 import Container from './components/Container';
 import Footer from './components/Footer';
@@ -145,6 +145,10 @@ class App extends Component {
             this.closeModal();
             this.fetchStudents();
             }}
+          onFailure={(err) => {
+            // console.log(JSON.stringify(err))
+            notification.errorNotification(err, 'Try a different email.');
+          }}
         />
         </Modal>
         <Footer numberOfStudents = {students.length} handleStudentClick={this.showModal}/>
