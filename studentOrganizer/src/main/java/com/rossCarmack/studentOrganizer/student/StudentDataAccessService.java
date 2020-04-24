@@ -27,7 +27,7 @@ public class StudentDataAccessService {
 
         String sql = "" +
                 "INSERT INTO student (student_id, first_name, last_name, email, gender) " +
-                "VALUES (?, ?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?, ?::gender)"; //the :: is for the casting in the migration table for gender enum
         return jdbcTemplate.update(sql, newStudentId, student.getFirstName(), student.getLastName(), student.getEmail(), student.getGender().name().toUpperCase());
 
     }
