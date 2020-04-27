@@ -1,0 +1,13 @@
+spring:
+  profiles:
+    active: @spring.profiles.active@
+
+server:
+  port: 5000
+
+app:
+  datasource:
+    jdbc-url: jdbc:postgresql://studentdatabase.co7rwi5zhb59.us-east-2.rds.amazonaws.com:5432/studentdatabase
+    username: rtothaoss
+    password: password12345
+    pool-size: 30

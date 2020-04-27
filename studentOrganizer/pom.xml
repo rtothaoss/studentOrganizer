@@ -17,6 +17,9 @@
 	<properties>
 		<java.version>11</java.version>
 		<lombok.version>1.18.12</lombok.version>
+		<frontend-maven.version>1.6</frontend-maven.version>
+		<node.version>v10.15.3</node.version>
+		<yarn.version>v1.12.1</yarn.version>
 	</properties>
 
 	<dependencies>
@@ -70,5 +73,18 @@
 			</plugin>
 		</plugins>
 	</build>
+
+
+	<profiles>
+		<profile>
+			<id>studentOrganizer</id>
+			<properties>
+				<spring.profiles.active>
+					studentOrganizer
+				</spring.profiles.active>
+			</properties>
+		</profile>
+	</profiles>
+
 
 </project>

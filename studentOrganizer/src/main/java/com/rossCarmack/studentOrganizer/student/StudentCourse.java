@@ -26,7 +26,7 @@ public class StudentCourse {
     @Getter
     private final Integer grade;
 
-    public StudentCourse(UUID student_id, UUID course_id, String name, String description, String department, String teacherName, LocalDate start_date, LocalDate end_date, int grade) {
+    public StudentCourse(UUID student_id, UUID course_id, String name, String description, String department, String teacherName, LocalDate start_date, LocalDate end_date, Integer grade) {
         this.student_id = student_id;
         this.course_id = course_id;
         this.name = name;
